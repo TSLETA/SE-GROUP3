@@ -1,16 +1,16 @@
 public class Login extends JFrame {
-	private JButton loginButton,exitButton;
-	private JLabel userNameLabel,passwordLabel;
-	private JTextField userNameText;
-	private JPasswordField passwordText;
-	private HandleAction handleAction;
-	private static JPanel loginPanel;
-	private ManagementUi MainUi;
-	private Toolkit toolKit=null;
-	private Dimension screenSize=null;
-	public static personManage nowPeople;
-	public  Login(){
-		Init();
+private JButton loginButton,exitButton;
+private JLabel userNameLabel,passwordLabel;
+private JTextField userNameText;
+private JPasswordField passwordText;
+private HandleAction handleAction;
+private static JPanel loginPanel;
+private ManagementUi MainUi;
+private Toolkit toolKit=null;
+private Dimension screenSize=null;
+public static personManage nowPeople;
+public  Login(){
+	Init();
 	}
 	
 	public void Init(){
