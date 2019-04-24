@@ -1,0 +1,220 @@
+public class personManageUi {
+	private JFrame mainJframe;
+	private Container con;
+	private JScrollPane JSpane;
+	private MyJTable DataTable;
+	private String [] names={"管理员账号","管理员姓名","管理员性别","管理人员密码"};
+	private JButton btn_Query,btn_Modify,btn_Add,btn_Delete;
+	private JPanel jpn;
+	private JPanel messageJpn;
+	private JTextField nameText,passText,sexText,idText;
+	private personManage personChange;//保存要修改的数据的信息
+	public personManageUi(){
+		mainJframe=new JFrame("管理员管理");
+		mainJframe.setSize(800, 600);
+		mainJframe.setVisible(true);
+		mainJframe.setResizable(false);
+		mainJframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		Dimension screenSize=Toolkit.getDefaultToolkit().getScreenSize();
+		mainJframe.setLocation(screenSize.width/2-400, screenSize.height/2-300);
+		con=mainJframe.getContentPane();
+		con.setLayout(new GridLayout(3,1));
+		DataTable=new MyJTable();
+		DefaultTableModel df=new DefaultTableModel(names,0);
+		df.setRowCount(20);
+		DataTable.setModel(df);
+		DataTable.addMouseListener(new table_selectActionListener());
+		JSpane=new JScrollPane(DataTable);
+		con.add(JSpane);
+		messageJpn=new JPanel();
+		messageJpn.setLayout(new GridBagLayout());
+		setComponent(new JLabel("管理人员账号:"),0,0,1,1,false);
+		idText=new JTextField();
+		setComponent(idText,1,0,1,150,false);
+		setComponent(new JLabel("管理人员姓名:"),2,0,1,1,false);
+		nameText=new JTextField();
+		setComponent(nameText,3,0,1,150,true);
+		setComponent(new JLabel("管理人员性别:"),0,1,1,1,false);
+		sexText=new JTextField();
+		setComponent(sexText,1,1,1,150,false);
+		setComponent(new JLabel("管理人员密码:"),2,1,1,1,false);
+		passText=new JTextField();
+		setComponent(passText,3,1,1,150,true);
+		con.add(messageJpn);
+		jpn=new JPanel();
+		jpn.setLayout(new FlowLayout());
+		con.add(jpn);
+		btn_Add=new JButton("添加");
+		btn_Add.addActionListener(new btn_AddActionListener());
+		jpn.add(btn_Add);
+		jpn.add(new JLabel("     "));
+		btn_Query=new JButton("查询");
+		btn_Query.addActionListener(new btn_QueryActionListener());
+		jpn.add(btn_Query);
+		jpn.add(new JLabel("     "));
+		btn_Modify=new JButton("修改");
+		btn_Modify.addActionListener(new btn_ModifyActionListener());
+		jpn.add(btn_Modify);
+		jpn.add(new JLabel("     "));
+		btn_Delete=new JButton("删除");
+		btn_Delete.addActionListener(new btn_DeleteActionListener());
+		jpn.add(btn_Delete);
+	}
+	/*
+	 * 完成查询按钮的监听事件
+	 */
+	private class btn_QueryActionListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			jdbcPersonManage jp=new jdbcPersonManage(null);
+			personManage people;
+			try {
+				jp.personQuery();
+			} catch (SQLException e1) {
+				JOptionPane.showMessageDialog(mainJframe,"无法连接到数据库" );
+			}finally{
+				jdbcDrive.jdbcConnectionClose();
+			}
+			ArrayList<personManage> personlist=jp.getPersonlist();
+			for(int i=0;i<personlist.size();i++){
+				people=personlist.get(i);
+				String [] data={people.getPersonManageId(),people.getPersonManageName(),
+						people.getPersonManageSex(),"**********"};
+				for(int j=0;j<4;j++){
+					DataTable.setValueAt(data[j], i, j);
+				}
+			}
+			for(int i=0;i<4;i++){
+				DataTable.setValueAt("", personlist.size(), i);
+			}
+		}
+	}	
+	/*
+	 * 完成对修改按钮的监听事件
+	 */
+	private class btn_ModifyActionListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			jdbcPersonManage jpm=new jdbcPersonManage(null);
+			try{
+			if(personChange.getPersonManageName()!=nameText.getText()){
+					jpm.personModify(personChange.getPersonManageId(),
+							"personManageName",nameText.getText());
+			}
+			if(personChange.getPersonManageSex()!=sexText.getText()){
+				    jpm.personModify(personChange.getPersonManageId()
+				    		, "personManageSex", sexText.getText());
+			}
+			if(personChange.getPersonManagepassword()!=passText.getText()){
+				jpm.personModify(personChange.getPersonManagepassword()
+			    		, "personManagepassword",passText.getText());
+			}
+			JOptionPane.showMessageDialog(mainJframe,"修改成功" );
+			 idText.setText("");
+             nameText.setText("");
+             sexText.setText("");
+             passText.setText("");
+		}catch(Exception e1){
+			System.out.println("修改失败");
+			JOptionPane.showMessageDialog(mainJframe,"修改失败" );
+		}finally{
+			jdbcDrive.jdbcConnectionClose();
+		}
+	}
+	}
+	/*
+	 * 完成对表格的监听事件
+	 */
+	private class table_selectActionListener extends  MouseAdapter{
+		public void mouseClicked(MouseEvent event)
+        {
+                int row = DataTable.rowAtPoint(event.getPoint());
+                if(row!=-1){
+                personChange=new personManage.personManageBuild()
+                		.addManageId((String) DataTable.getValueAt(row, 0))
+                		.addManageName((String) DataTable.getValueAt(row, 1))
+                		.addManageSex((String) DataTable.getValueAt(row, 2))
+                		.addManagePass((String) DataTable.getValueAt(row, 3))
+                		.CreateManageBuild();
+                idText.setText(personChange.getPersonManageId());
+                nameText.setText(personChange.getPersonManageName());
+                sexText.setText(personChange.getPersonManageSex());
+                passText.setText(personChange.getPersonManagepassword());
+                }
+        }
+	}
+	/*
+	 * 完成对增加按钮的监听
+	 */
+	private class btn_AddActionListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			personManage p=new personManage
+					.personManageBuild()
+					.addManageId(idText.getText().trim())
+					.addManageName(nameText.getText().trim())
+					.addManageSex(sexText.getText().trim())
+					.addManagePass(passText.getText().trim())
+					.CreateManageBuild();
+			jdbcPersonManage jpm;
+			try {
+				jpm = new jdbcPersonManage(p);
+				jpm.personAdd();
+				idText.setText("");
+				nameText.setText("");
+				passText.setText("");
+				sexText.setText("");
+				JOptionPane.showMessageDialog(mainJframe,"添加成功" );
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(mainJframe,"无法连接到数据库" );
+			}finally{
+				jdbcDrive.jdbcConnectionClose();
+			}
+		}
+	}
+	/*
+	 * 完成对删除按钮的监听
+	 */
+	private class btn_DeleteActionListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+	
+			personManage p=new personManage
+					.personManageBuild()
+					.addManageId(idText.getText().trim())
+					.CreateManageBuild();
+			jdbcPersonManage jpm=
+					new jdbcPersonManage(p);
+			try {
+				jpm.personDelete();
+				idText.setText("");
+				nameText.setText("");
+				passText.setText("");
+				sexText.setText("");
+				JOptionPane.showMessageDialog(mainJframe, "删除成功");
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				JOptionPane.showMessageDialog(mainJframe, "删除失败");
+			}
+		}
+	}
+ 
+	private void setComponent(JComponent component, int gridx, int gridy,
+			int gridwidth, int ipadx, boolean fill) {
+		final GridBagConstraints gridBagConstrains = new GridBagConstraints();
+		gridBagConstrains.gridx = gridx;
+		gridBagConstrains.gridy = gridy;
+		gridBagConstrains.insets = new Insets(10, 15, 3, 1);
+		if (gridwidth > 1)
+			gridBagConstrains.gridwidth = gridwidth;
+		if (ipadx > 0)
+			gridBagConstrains.ipadx = ipadx;
+		if (fill)
+			gridBagConstrains.fill = GridBagConstraints.HORIZONTAL;
+		messageJpn.add(component, gridBagConstrains);
+	}
+	public static void main(String [] args){
+		new personManageUi();
+	}
+}
