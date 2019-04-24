@@ -1,0 +1,3 @@
+# SE-GROUP3
+首先，在开始编写程序之前，需要先添加一些工具类来辅助整个程序的构建，其中jdbcDrive是最基本的类，负责和数据库进行连接，并且执行语句的类。
+数据库的连接分为四个方法：其中两个是负责数据库的连接和释放。jdbcExecuteUpdate负责传递SQL的增加，修改，删除，不需要有结果集的语句。jdbcExecuteQuery负责进行jdbc的查询，将查询的结果放在resultset里面。Connection类是负责进行数据库的连接，Statement 负责传递查询语句。resultset是结果集，负责保存储存的信息
