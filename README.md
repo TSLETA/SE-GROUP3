@@ -1,3 +1,7 @@
 # SE-GROUP3
 首先，在开始编写程序之前，需要先添加一些工具类来辅助整个程序的构建，其中jdbcDrive是最基本的类，负责和数据库进行连接，并且执行语句的类。
-数据库的连接分为四个方法：其中两个是负责数据库的连接和释放。jdbcExecuteUpdate负责传递SQL的增加，修改，删除，不需要有结果集的语句。jdbcExecuteQuery负责进行jdbc的查询，将查询的结果放在resultset里面。Connection类是负责进行数据库的连接，Statement 负责传递查询语句。resultset是结果集，负责保存储存的信息
+数据库的连接分为四个方法：其中两个是负责数据库的连接和释放。jdbcExecuteUpdate负责传递SQL的增加，修改，删除，不需要有结果集的语句。jdbcExecuteQuery负责进行jdbc的查询，将查询的结果放在resultset里面。Connection类是负责进行数据库的连接，Statement 负责传递查询语句。resultset是结果集，负责保存储存的信息。
+设计主界面的时候，第一个是用于放置菜单选项的JMenuBar，它是放置JMenu的容器，而JMenu是房子JMenuItem的容器。
+搭建完主界面之后，还有管理员的登录界面，然后学生的管理界面，宿舍的管理界面，最后调宿的管理界面。
+登录的时候，如果数据库存在对应的账号，则返回true，让用户登录，否则返回false。
+数据库建立好了之后，需要进行管理人员的创立，修改，删除
