@@ -1,6 +1,6 @@
 public class jdbcLogin {
-	private static HashMap<String,String> people=new HashMap<String,String>();
-	public static boolean Judge(String user,String pass){
+private static HashMap<String,String> people=new HashMap<String,String>();
+public static boolean Judge(String user,String pass){
 		String SQL = "SELECT * FROM personManage";
 		boolean flag=false;
 		try {
