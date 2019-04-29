@@ -15,7 +15,7 @@ public class dormitoryUpdateUi extends JFrame{
 	private JButton btn_query,btn_Modify,btn_Delete;
 	private String attribute;
 	private String changeAttribute;
-	public dormitoryUpdateUi(){
+public dormitoryUpdateUi(){
 		this.setTitle("宿舍更新");
 		this.setVisible(true);
 		this.setSize(800, 600);
@@ -74,7 +74,7 @@ public class dormitoryUpdateUi extends JFrame{
 	
 	private class btn_queryActionListener implements ActionListener{
 		@Override
-		public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e) {
 			jdbcDormitory jd=new jdbcDormitory();
 			HashMap<Integer,ArrayList<Dormitory> > number=new HashMap<Integer,ArrayList<Dormitory>>();
 			ArrayList<Dormitory> floordormitory;
@@ -114,7 +114,7 @@ public class dormitoryUpdateUi extends JFrame{
 	}
 	private class treeSelectActionListener implements TreeSelectionListener{
 		@Override
-		public void valueChanged(TreeSelectionEvent e) {
+public void valueChanged(TreeSelectionEvent e) {
 			if(e.getPath().getLastPathComponent().toString().length()==5){
 			Dormitory d=null;
 			String message=e.getPath().getLastPathComponent().toString();
@@ -162,7 +162,7 @@ public class dormitoryUpdateUi extends JFrame{
 	
 	private class jf_ActionListener implements ActionListener{
 		@Override
-		public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e) {
 			HashMap<JTextField,String> change=new HashMap<JTextField,String>();
 			change.put(id, "Dnumber");
 			change.put(sex, "Dsex");
@@ -178,7 +178,7 @@ public class dormitoryUpdateUi extends JFrame{
 	private class btn_DeleteActionListener implements ActionListener{
  
 		@Override
-		public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e) {
 			Dormitory d=new Dormitory
 					.DormitoryBuilder()
 					.addDormitoryId(id.getText().trim())
